@@ -1,6 +1,6 @@
 // Copyright (C) 2024 Michael J. Fromberger. All Rights Reserved.
 
-// Package buntdbstore implements the [blob.Store] interfaace using [buntdb].
+// Package buntdbstore implements the [blob.KV] interfaace using [buntdb].
 //
 // [buntdb]: https://github.com/tidwall/buntdb
 package buntdbstore
@@ -13,25 +13,25 @@ import (
 	"github.com/tidwall/buntdb"
 )
 
-// Store implements the [blob.Store] interface using a buntdb database.
-type Store struct {
+// KV implements the [blob.KV] interface using a buntdb database.
+type KV struct {
 	db *buntdb.DB
 }
 
-// Opener constructs a [Store] from an address comprising a path.
-func Opener(_ context.Context, addr string) (blob.Store, error) { return Open(addr, nil) }
+// Opener constructs a [KV] from an address comprising a path.
+func Opener(_ context.Context, addr string) (blob.KV, error) { return Open(addr, nil) }
 
-// Open creates a [Store] by opening the buntdb database at path.
-func Open(path string, opts *Options) (*Store, error) {
+// Open creates a [KV] by opening the buntdb database at path.
+func Open(path string, opts *Options) (*KV, error) {
 	db, err := buntdb.Open(path)
 	if err != nil {
 		return nil, err
 	}
-	return &Store{db: db}, nil
+	return &KV{db: db}, nil
 }
 
-// Get implements part of the [blob.Store] interface.
-func (s *Store) Get(ctx context.Context, key string) ([]byte, error) {
+// Get implements part of the [blob.KV] interface.
+func (s *KV) Get(ctx context.Context, key string) ([]byte, error) {
 	var data string
 	err := s.db.View(func(tx *buntdb.Tx) error {
 		var gerr error
@@ -44,8 +44,8 @@ func (s *Store) Get(ctx context.Context, key string) ([]byte, error) {
 	return []byte(data), err
 }
 
-// Put implements part of the [blob.Store] interface.
-func (s *Store) Put(ctx context.Context, opts blob.PutOptions) error {
+// Put implements part of the [blob.KV] interface.
+func (s *KV) Put(ctx context.Context, opts blob.PutOptions) error {
 	return s.db.Update(func(tx *buntdb.Tx) error {
 		if !opts.Replace {
 			if _, err := tx.Get(opts.Key); err == nil {
@@ -57,8 +57,8 @@ func (s *Store) Put(ctx context.Context, opts blob.PutOptions) error {
 	})
 }
 
-// Delete implements part of the [blob.Store] interface.
-func (s *Store) Delete(ctx context.Context, key string) error {
+// Delete implements part of the [blob.KV] interface.
+func (s *KV) Delete(ctx context.Context, key string) error {
 	return s.db.Update(func(tx *buntdb.Tx) error {
 		_, err := tx.Delete(key)
 		if errors.Is(err, buntdb.ErrNotFound) {
@@ -68,8 +68,8 @@ func (s *Store) Delete(ctx context.Context, key string) error {
 	})
 }
 
-// List implements part of the [blob.Store] interface.
-func (s *Store) List(ctx context.Context, start string, f func(string) error) error {
+// List implements part of the [blob.KV] interface.
+func (s *KV) List(ctx context.Context, start string, f func(string) error) error {
 	return s.db.View(func(tx *buntdb.Tx) error {
 		var ferr error
 		if err := tx.AscendGreaterOrEqual("", start, func(key, _ string) bool {
@@ -85,8 +85,8 @@ func (s *Store) List(ctx context.Context, start string, f func(string) error) er
 	})
 }
 
-// Len implements part of the [blob.Store] interface.
-func (s *Store) Len(ctx context.Context) (n int64, err error) {
+// Len implements part of the [blob.KV] interface.
+func (s *KV) Len(ctx context.Context) (n int64, err error) {
 	err = s.db.View(func(tx *buntdb.Tx) error {
 		return tx.AscendKeys("*", func(_, _ string) bool {
 			n++
@@ -96,8 +96,8 @@ func (s *Store) Len(ctx context.Context) (n int64, err error) {
 	return
 }
 
-// Close implements part of the [blob.Store] interface.
-func (s *Store) Close(_ context.Context) error {
+// Close implements part of the [blob.KV] interface.
+func (s *KV) Close(_ context.Context) error {
 	merr := s.db.Shrink()
 	if errors.Is(merr, buntdb.ErrDatabaseClosed) {
 		return nil
