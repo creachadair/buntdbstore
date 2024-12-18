@@ -3,7 +3,6 @@
 package buntdbstore_test
 
 import (
-	"context"
 	"flag"
 	"os"
 	"path/filepath"
@@ -31,7 +30,4 @@ func TestStore(t *testing.T) {
 		t.Fatalf("Creating store at %q: %v", path, err)
 	}
 	storetest.Run(t, s)
-	if err := s.Close(context.Background()); err != nil {
-		t.Errorf("Closing store: %v", err)
-	}
 }

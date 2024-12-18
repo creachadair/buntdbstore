@@ -3,7 +3,7 @@ module github.com/creachadair/buntdbstore
 go 1.23.3
 
 require (
-	github.com/creachadair/ffs v0.7.0
+	github.com/creachadair/ffs v0.7.2-0.20241218195804-ea9c7142ea51
 	github.com/tidwall/buntdb v1.3.2
 )
 
