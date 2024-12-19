@@ -9,59 +9,16 @@ import (
 	"context"
 	"errors"
 	"strings"
-	"sync"
 
 	"github.com/creachadair/ffs/blob"
 	"github.com/creachadair/ffs/storage/dbkey"
+	"github.com/creachadair/ffs/storage/monitor"
 	"github.com/tidwall/buntdb"
 )
 
 // Store implements the [blob.StoreCloser] interface using a BuntDB instance.
 type Store struct {
-	*dbMonitor
-}
-
-type dbMonitor struct {
-	DB     *buntdb.DB
-	prefix dbkey.Prefix
-
-	μ    sync.Mutex
-	subs map[string]*dbMonitor
-	kvs  map[string]KV
-}
-
-// Keyspace implements part of the [blob.Store] interface.
-// A successful result has concrete type [KV].
-// This implementation never reports an error.
-func (d *dbMonitor) Keyspace(ctx context.Context, name string) (blob.KV, error) {
-	d.μ.Lock()
-	defer d.μ.Unlock()
-
-	kv, ok := d.kvs[name]
-	if !ok {
-		kv = KV{db: d.DB, prefix: d.prefix.Keyspace(name)}
-		d.kvs[name] = kv
-	}
-	return kv, nil
-}
-
-// Sub implements part of the [blob.Store] interface.
-// This implementation never reports an error.
-func (d *dbMonitor) Sub(ctx context.Context, name string) (blob.Store, error) {
-	d.μ.Lock()
-	defer d.μ.Unlock()
-
-	sub, ok := d.subs[name]
-	if !ok {
-		sub = &dbMonitor{
-			DB:     d.DB,
-			prefix: d.prefix.Sub(name),
-			subs:   make(map[string]*dbMonitor),
-			kvs:    make(map[string]KV),
-		}
-		d.subs[name] = sub
-	}
-	return sub, nil
+	*monitor.M[*buntdb.DB, KV]
 }
 
 // Close implements part of the [blob.StoreCloser] interface.
@@ -82,11 +39,9 @@ func Open(path string, opts *Options) (blob.StoreCloser, error) {
 	if err != nil {
 		return nil, err
 	}
-	return Store{dbMonitor: &dbMonitor{
-		DB:   db,
-		subs: make(map[string]*dbMonitor),
-		kvs:  make(map[string]KV),
-	}}, nil
+	return Store{M: monitor.New(db, "", func(c monitor.Config[*buntdb.DB]) KV {
+		return KV{db: c.DB, prefix: c.Prefix}
+	})}, nil
 }
 
 // KV implements the [blob.KV] interface using a buntdb database.
