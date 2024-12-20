@@ -39,8 +39,11 @@ func Open(path string, opts *Options) (blob.StoreCloser, error) {
 	if err != nil {
 		return nil, err
 	}
-	return Store{M: monitor.New(db, "", func(c monitor.Config[*buntdb.DB]) KV {
-		return KV{db: c.DB, prefix: c.Prefix}
+	return Store{M: monitor.New(monitor.Config[*buntdb.DB, KV]{
+		DB: db,
+		NewKV: func(_ context.Context, db *buntdb.DB, pfx dbkey.Prefix, _ string) (KV, error) {
+			return KV{db: db, prefix: pfx}, nil
+		},
 	})}, nil
 }
 
