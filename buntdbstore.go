@@ -67,22 +67,22 @@ func (s KV) Get(ctx context.Context, key string) ([]byte, error) {
 	return []byte(data), err
 }
 
-// Stat implements part of the [blob.KV] interface.
-func (s KV) Stat(ctx context.Context, keys ...string) (out blob.StatMap, err error) {
-	out = make(blob.StatMap)
-	err = s.db.View(func(tx *buntdb.Tx) error {
+// Has implements part of the [blob.KV] interface.
+func (s KV) Has(ctx context.Context, keys ...string) (blob.KeySet, error) {
+	var out blob.KeySet
+	err := s.db.View(func(tx *buntdb.Tx) error {
 		for _, key := range keys {
-			data, gerr := tx.Get(s.prefix.Add(key))
+			_, gerr := tx.Get(s.prefix.Add(key))
 			if errors.Is(gerr, buntdb.ErrNotFound) {
 				continue
 			} else if gerr != nil {
 				return gerr
 			}
-			out[key] = blob.Stat{Size: int64(len(data))}
+			out.Add(key)
 		}
 		return nil
 	})
-	return
+	return out, err
 }
 
 // Put implements part of the [blob.KV] interface.
