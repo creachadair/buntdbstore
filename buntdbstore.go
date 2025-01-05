@@ -8,6 +8,7 @@ package buntdbstore
 import (
 	"context"
 	"errors"
+	"iter"
 	"strings"
 
 	"github.com/creachadair/ffs/blob"
@@ -111,23 +112,20 @@ func (s KV) Delete(ctx context.Context, key string) error {
 }
 
 // List implements part of the [blob.KV] interface.
-func (s KV) List(ctx context.Context, start string, f func(string) error) error {
-	return s.db.View(func(tx *buntdb.Tx) error {
-		var ferr error
-		if err := tx.AscendGreaterOrEqual("", s.prefix.Add(start), func(key, _ string) bool {
-			if !strings.HasPrefix(key, string(s.prefix)) {
-				return false // no more belonging to this keyspace
-			}
-			ferr = f(s.prefix.Remove(key))
-			return ferr == nil
-		}); err != nil {
-			return err
+func (s KV) List(ctx context.Context, start string) iter.Seq2[string, error] {
+	return func(yield func(string, error) bool) {
+		err := s.db.View(func(tx *buntdb.Tx) error {
+			return tx.AscendGreaterOrEqual("", s.prefix.Add(start), func(key, _ string) bool {
+				if !strings.HasPrefix(key, string(s.prefix)) {
+					return false // no more belonging to this keyspace
+				}
+				return yield(s.prefix.Remove(key), nil)
+			})
+		})
+		if err != nil {
+			yield("", err)
 		}
-		if errors.Is(ferr, blob.ErrStopListing) {
-			return nil
-		}
-		return ferr
-	})
+	}
 }
 
 // Len implements part of the [blob.KV] interface.
