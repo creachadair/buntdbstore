@@ -3,7 +3,7 @@ module github.com/creachadair/buntdbstore
 go 1.23.3
 
 require (
-	github.com/creachadair/ffs v0.13.13
+	github.com/creachadair/ffs v0.13.14
 	github.com/tidwall/buntdb v1.3.2
 )
 
@@ -17,6 +17,6 @@ require (
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/tidwall/rtred v0.1.2 // indirect
 	github.com/tidwall/tinyqueue v0.1.1 // indirect
-	golang.org/x/crypto v0.35.0 // indirect
-	golang.org/x/sys v0.30.0 // indirect
+	golang.org/x/crypto v0.36.0 // indirect
+	golang.org/x/sys v0.31.0 // indirect
 )
