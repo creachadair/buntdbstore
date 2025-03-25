@@ -1,14 +1,16 @@
 module github.com/creachadair/buntdbstore
 
-go 1.23.3
+go 1.24
+
+toolchain go1.24.1
 
 require (
-	github.com/creachadair/ffs v0.13.14
+	github.com/creachadair/ffs v0.13.15
 	github.com/tidwall/buntdb v1.3.2
 )
 
 require (
-	github.com/creachadair/mds v0.24.0 // indirect
+	github.com/creachadair/mds v0.24.1 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/tidwall/btree v1.7.0 // indirect
 	github.com/tidwall/gjson v1.18.0 // indirect
