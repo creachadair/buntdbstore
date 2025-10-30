@@ -1,7 +1,7 @@
-github.com/creachadair/ffs v0.14.5 h1:yKGYe8Wk19Gi/j+R13wi+Elouv1g7dBbjSAz4W547OY=
-github.com/creachadair/ffs v0.14.5/go.mod h1:QkwScDEy9rkHfvdjOlC7eEqSg2K/8Hpz0hC0Yvvwm0E=
-github.com/creachadair/mds v0.25.4 h1:rUQqf9ihePG8fhppXohLSY+AdOljU4oYyWVDhWiWhyE=
-github.com/creachadair/mds v0.25.4/go.mod h1:4hatI3hRM+qhzuAmqPRFvaBM8mONkS7nsLxkcuTYUIs=
+github.com/creachadair/ffs v0.15.1 h1:NX8D/KP9E6r9zjvBRf+VWmUvQNhaTZW2LcMExf5Kh3w=
+github.com/creachadair/ffs v0.15.1/go.mod h1:5Wu4T4pCG1YF5M+/+uFHkACF6JCfYB2/kpOMyjOqxJ4=
+github.com/creachadair/mds v0.25.10 h1:9k9JB35D1xhOCFl0liBhagBBp8fWWkKZrA7UXsfoHtA=
+github.com/creachadair/mds v0.25.10/go.mod h1:4hatI3hRM+qhzuAmqPRFvaBM8mONkS7nsLxkcuTYUIs=
 github.com/google/go-cmp v0.7.0 h1:wk8382ETsv4JYUZwIsn6YpYiWiBsYLSJiTsyBybVuN8=
 github.com/google/go-cmp v0.7.0/go.mod h1:pXiqmnSA92OHEEa9HXL2W4E7lf9JzCmGVUdgjX3N/iU=
 github.com/tidwall/assert v0.1.0 h1:aWcKyRBUAdLoVebxo95N7+YZVTFF/ASTr7BN4sLP6XI=

@@ -5,12 +5,12 @@ go 1.24.0
 toolchain go1.24.1
 
 require (
-	github.com/creachadair/ffs v0.14.5
+	github.com/creachadair/ffs v0.15.1
 	github.com/tidwall/buntdb v1.3.2
 )
 
 require (
-	github.com/creachadair/mds v0.25.4 // indirect
+	github.com/creachadair/mds v0.25.10 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/tidwall/btree v1.8.1 // indirect
 	github.com/tidwall/gjson v1.18.0 // indirect
