@@ -8,7 +8,7 @@ require (
 )
 
 require (
-	github.com/creachadair/mds v0.25.13 // indirect
+	github.com/creachadair/mds v0.25.15 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/tidwall/btree v1.8.1 // indirect
 	github.com/tidwall/gjson v1.18.0 // indirect
@@ -17,6 +17,6 @@ require (
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/tidwall/rtred v0.1.2 // indirect
 	github.com/tidwall/tinyqueue v0.1.1 // indirect
-	golang.org/x/crypto v0.45.0 // indirect
-	golang.org/x/sys v0.38.0 // indirect
+	golang.org/x/crypto v0.46.0 // indirect
+	golang.org/x/sys v0.39.0 // indirect
 )
