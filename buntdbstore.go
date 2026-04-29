@@ -27,6 +27,8 @@ func (s Store) Close(_ context.Context) error {
 	merr := s.DB.Shrink()
 	if errors.Is(merr, buntdb.ErrDatabaseClosed) {
 		return nil
+	} else if errors.Is(merr, buntdb.ErrShrinkInProcess) {
+		merr = nil // this is OK, the background manager does them periodically
 	}
 	return errors.Join(merr, s.DB.Close())
 }
