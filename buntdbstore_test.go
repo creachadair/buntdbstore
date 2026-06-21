@@ -31,3 +31,16 @@ func TestStore(t *testing.T) {
 	}
 	storetest.Run(t, s)
 }
+
+func BenchmarkStore(b *testing.B) {
+	path := filepath.Join(b.TempDir(), "benchmark.db")
+	s, err := buntdbstore.Open(path, nil)
+	if err != nil {
+		b.Fatal(err)
+	}
+	kv, err := s.KV(b.Context(), "benchmark")
+	if err != nil {
+		b.Fatalf("KV: %v", err)
+	}
+	storetest.BenchmarkKV(b, kv)
+}
