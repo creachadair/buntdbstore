@@ -3,12 +3,12 @@ module github.com/creachadair/buntdbstore
 go 1.25.0
 
 require (
-	github.com/creachadair/ffs v0.17.15
+	github.com/creachadair/ffs v0.18.0
 	github.com/tidwall/buntdb v1.3.2
 )
 
 require (
-	github.com/creachadair/mds v0.29.2 // indirect
+	github.com/creachadair/mds v0.30.2 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/tidwall/btree v1.8.1 // indirect
 	github.com/tidwall/gjson v1.18.0 // indirect
@@ -17,6 +17,6 @@ require (
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/tidwall/rtred v0.1.2 // indirect
 	github.com/tidwall/tinyqueue v0.1.1 // indirect
-	golang.org/x/crypto v0.53.0 // indirect
-	golang.org/x/sys v0.46.0 // indirect
+	golang.org/x/crypto v0.54.0 // indirect
+	golang.org/x/sys v0.47.0 // indirect
 )
